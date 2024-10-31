@@ -1,5 +1,6 @@
 # Projeto de detecção de fraude em cartão de crédito
 # Integrantes Bruno Trevizan, Gustavo Rossi e Yuji Kiyota
+# lalala
 
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
