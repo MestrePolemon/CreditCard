@@ -1,6 +1,9 @@
 # Projeto de detecção de fraude em cartão de crédito
 # Integrantes Bruno Trevizan, Gustavo Rossi e Yuji Kiyota
+<<<<<<< HEAD
 # lalala
+=======
+>>>>>>> origin/master
 
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
@@ -27,6 +30,7 @@ df = pd.read_csv('creditcard.csv')
 X = df.drop(columns=['Class'])
 y = df['Class']
 
+<<<<<<< HEAD
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Smote para balancear os dados da base de treino
@@ -37,10 +41,26 @@ X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
 param_grid_rf = {
     'n_estimators': [100, 200],
     'max_depth': [None, 10, 20]
+=======
+# Split the data once
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
+
+# Apply SMOTE to balance the training data
+smote = SMOTE(random_state=42)
+X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+
+# Define parameter grids for each model
+param_grid_rf = {
+    'n_estimators': [100, 200],
+    'max_depth': [None, 30],
+    'min_samples_split': [2],
+    'min_samples_leaf': [1]
+>>>>>>> origin/master
 }
 
 param_grid_lr = {
     'C': [0.1, 1, 10],
+<<<<<<< HEAD
     'solver': ['lbfgs', 'liblinear']
 }
 
@@ -50,11 +70,27 @@ param_grid_gb = {
 }
 
 # Grid search para a random forest
+=======
+    'class_weight': ['balanced']
+}
+
+
+param_grid_gb = {
+    'n_estimators': [100, 200],
+    'learning_rate': [0.02, 0.2, 0.3]
+}
+
+# Perform Grid Search for Random Forest
+>>>>>>> origin/master
 grid_search_rf = GridSearchCV(RandomForestClassifier(random_state=42), param_grid_rf, cv=3, scoring='accuracy')
 grid_search_rf.fit(X_train_res, y_train_res)
 best_rf = grid_search_rf.best_estimator_
 
+<<<<<<< HEAD
 # Grid search para a Regressão Logística
+=======
+# Perform Grid Search for Logistic Regression
+>>>>>>> origin/master
 scaler = StandardScaler()
 X_train_res_scaled = scaler.fit_transform(X_train_res)
 X_test_scaled = scaler.transform(X_test)
@@ -63,7 +99,11 @@ grid_search_lr = GridSearchCV(LogisticRegression(class_weight="balanced", random
 grid_search_lr.fit(X_train_res_scaled, y_train_res)
 best_lr = grid_search_lr.best_estimator_
 
+<<<<<<< HEAD
 # Grid search para o Gradient Boosting
+=======
+# Perform Grid Search for Gradient Boosting
+>>>>>>> origin/master
 grid_search_gb = GridSearchCV(GradientBoostingClassifier(random_state=42), param_grid_gb, cv=3, scoring='accuracy')
 grid_search_gb.fit(X_train_res, y_train_res)
 best_gb = grid_search_gb.best_estimator_
