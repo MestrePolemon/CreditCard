@@ -14,11 +14,24 @@ Este projeto visa desenvolver um sistema de **detecção de fraudes** em transa�
 
 ## 🛠 **Tecnologias Utilizadas**
 
-- **Python**
-- **Pandas**
-- **NumPy**
-- **Scikit-learn**
-- **Matplotlib**
-- **Seaborn**
+Este projeto utiliza as seguintes bibliotecas:
+
+- **Pandas**: Para manipulação e análise de dados.
+- **Scikit-learn**: Para implementação de modelos de machine learning e métricas de avaliação.
+  - `RandomForestClassifier`
+  - `GradientBoostingClassifier`
+  - `VotingClassifier`
+  - `LogisticRegression`
+  - `StandardScaler`
+  - `GridSearchCV`
+  - `train_test_split`
+  - `roc_auc_score`
+  - `accuracy_score`
+  - `confusion_matrix`
+  - `classification_report`
+- **Imbalanced-learn (imblearn)**: Para tratamento de dados desbalanceados com a técnica SMOTE.
+- **Colorama**: Para estilização de texto no terminal.
+- **Tabulate**: Para formatação de tabelas no terminal.
+- **OS**: Para interação com o sistema operacional.
 
 ---
