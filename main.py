@@ -1,127 +1,115 @@
-# Projeto de detecção de fraude em cartão de crédito
-# Integrantes Bruno Trevizan, Gustavo Rossi e Yuji Kiyota
-<<<<<<< HEAD
-# lalala
-=======
->>>>>>> origin/master
-
+import pandas as pd
+import os
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import GridSearchCV
-from tabulate import tabulate
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV, train_test_split
 from imblearn.over_sampling import SMOTE
 from colorama import Fore, Style
-import pandas as pd
+from tabulate import tabulate
+from sklearn.metrics import roc_auc_score
+
+def carregar_dados(caminho):
+    return pd.read_csv(caminho)
+
+
+def balancear_dados(X, y):
+    smote = SMOTE(random_state=42)
+    return smote.fit_resample(X, y)
+
+
+def dividir_dados(X, y, test_size=0.4, random_state=42):
+    return train_test_split(X, y, test_size=test_size, random_state=random_state, stratify=y)
+
+
+def padronizar_dados(X_train, X_test):
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    return X_train_scaled, X_test_scaled
+
+
+def otimizar_modelo(modelo, param_grid, X_train, y_train, cv=5, scoring='accuracy'):
+    grid_search = GridSearchCV(modelo, param_grid, cv=cv, scoring=scoring)
+    grid_search.fit(X_train, y_train)
+    return grid_search.best_estimator_
+
 
 def exibir_informacoes(y_test, y_prev):
-    acs = accuracy_score(y_test, y_prev, normalize=True) * 100
+    acs = accuracy_score(y_test, y_prev) * 100
     cfm = confusion_matrix(y_test, y_prev)
+    auc_roc = roc_auc_score(y_test, y_prev)
     matriz_confusao = tabulate(cfm, headers=['Fraude', 'Não Fraude'], tablefmt='fancy_grid', showindex=['Fraude', 'Não Fraude'])
     print(Fore.GREEN + 'Informações sobre o modelo:' + Style.RESET_ALL)
     print(f'Acurácia(%): {acs:.2f}%')
     print(matriz_confusao)
+    print(f'Classes divididas com eficacia: {auc_roc:.4f}')
     print(classification_report(y_test, y_prev))
 
-df = pd.read_csv('creditcard.csv')
 
-X = df.drop(columns=['Class'])
-y = df['Class']
+def treinar_modelos(X_train, y_train, X_test, y_test):
 
-<<<<<<< HEAD
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Definir os hiperparâmetros para otimização dos modelos
+    param_grid_rf = {
+        'n_estimators': [100, 150, 200],
+        'max_depth': [None, 30],
+        'min_samples_split': [2],
+        'min_samples_leaf': [1]
+    }
 
-# Smote para balancear os dados da base de treino
-smote = SMOTE(random_state=42)
-X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+    param_grid_lr = {
+        'C': [0.1, 1, 10],
+        'solver': ['lbfgs', 'liblinear'],
+        'penalty': ['l2'],
+        'max_iter': [10000],
+        'class_weight': ['balanced'],
+    }
 
-# Parametros para cada modelo
-param_grid_rf = {
-    'n_estimators': [100, 200],
-    'max_depth': [None, 10, 20]
-=======
-# Split the data once
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=42)
+    param_grid_gb = {
+        'n_estimators': [100, 200],
+        'learning_rate': [0.01, 0.1, 0.2],
+        'max_depth': [3, 5, 7],
+        'min_samples_split': [2],
+        'min_samples_leaf': [1],
+        'subsample': [0.8, 1]
+    }
 
-# Apply SMOTE to balance the training data
-smote = SMOTE(random_state=42)
-X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+    print("\nTREINAMENTO COM RANDOM FOREST\n")
+    best_rf = otimizar_modelo(RandomForestClassifier(random_state=42), param_grid_rf, X_train, y_train)
+    y_prev = best_rf.predict(X_test)
+    exibir_informacoes(y_test, y_prev)
 
-# Define parameter grids for each model
-param_grid_rf = {
-    'n_estimators': [100, 200],
-    'max_depth': [None, 30],
-    'min_samples_split': [2],
-    'min_samples_leaf': [1]
->>>>>>> origin/master
-}
+    print("\nTREINAMENTO COM REGRESSÃO LOGÍSTICA\n")
+    X_train_scaled, X_test_scaled = padronizar_dados(X_train, X_test)
+    best_lr = otimizar_modelo(LogisticRegression(random_state=42), param_grid_lr, X_train_scaled, y_train)
+    y_prev = best_lr.predict(X_test_scaled)
+    exibir_informacoes(y_test, y_prev)
 
-param_grid_lr = {
-    'C': [0.1, 1, 10],
-<<<<<<< HEAD
-    'solver': ['lbfgs', 'liblinear']
-}
+    print("\nTREINAMENTO COM GRADIENT BOOSTING\n")
+    best_gb = otimizar_modelo(GradientBoostingClassifier(random_state=42), param_grid_gb, X_train, y_train)
+    y_prev = best_gb.predict(X_test)
+    exibir_informacoes(y_test, y_prev)
 
-param_grid_gb = {
-    'n_estimators': [100, 200],
-    'learning_rate': [0.01, 0.1, 0.2]
-}
-
-# Grid search para a random forest
-=======
-    'class_weight': ['balanced']
-}
+    print("\nTREINAMENTO COM VOTING CLASSIFIER\n")
+    voting_class = VotingClassifier(estimators=[('rf', best_rf), ('lr', best_lr), ('gb', best_gb)],
+                                    voting='soft',
+                                    weights=[2, 1, 1])
+    voting_class.fit(X_train, y_train)
+    y_pred = voting_class.predict(X_test)
+    exibir_informacoes(y_test, y_pred)
 
 
-param_grid_gb = {
-    'n_estimators': [100, 200],
-    'learning_rate': [0.02, 0.2, 0.3]
-}
+def main():
+    os.environ['LOKY_MAX_CPU_COUNT'] = '6'
+    df = carregar_dados('creditcard.csv')
+    X = df.drop(columns=['Class'])
+    y = df['Class']
+    X_train, X_test, y_train, y_test = dividir_dados(X, y)
+    X_train_res, y_train_res = balancear_dados(X_train, y_train)
+    treinar_modelos(X_train_res, y_train_res, X_test, y_test)
 
-# Perform Grid Search for Random Forest
->>>>>>> origin/master
-grid_search_rf = GridSearchCV(RandomForestClassifier(random_state=42), param_grid_rf, cv=3, scoring='accuracy')
-grid_search_rf.fit(X_train_res, y_train_res)
-best_rf = grid_search_rf.best_estimator_
 
-<<<<<<< HEAD
-# Grid search para a Regressão Logística
-=======
-# Perform Grid Search for Logistic Regression
->>>>>>> origin/master
-scaler = StandardScaler()
-X_train_res_scaled = scaler.fit_transform(X_train_res)
-X_test_scaled = scaler.transform(X_test)
+if __name__ == "__main__":
+    main()
 
-grid_search_lr = GridSearchCV(LogisticRegression(class_weight="balanced", random_state=42, max_iter=10000), param_grid_lr, cv=3, scoring='accuracy')
-grid_search_lr.fit(X_train_res_scaled, y_train_res)
-best_lr = grid_search_lr.best_estimator_
-
-<<<<<<< HEAD
-# Grid search para o Gradient Boosting
-=======
-# Perform Grid Search for Gradient Boosting
->>>>>>> origin/master
-grid_search_gb = GridSearchCV(GradientBoostingClassifier(random_state=42), param_grid_gb, cv=3, scoring='accuracy')
-grid_search_gb.fit(X_train_res, y_train_res)
-best_gb = grid_search_gb.best_estimator_
-
-print("\nTREINAMENTO COM RANDOM FOREST\n")
-y_prev = best_rf.predict(X_test)
-exibir_informacoes(y_test, y_prev)
-
-print("\nTREINAMENTO COM REGRESSÃO LOGISTÍCA\n")
-y_prev = best_lr.predict(X_test_scaled)
-exibir_informacoes(y_test, y_prev)
-
-print("\nTREINAMENTO COM GRADIENT BOOSTING\n")
-y_prev = best_gb.predict(X_test)
-exibir_informacoes(y_test, y_prev)
-
-print("\nTREINAMENTO COM VOTING CLASSIFIER\n")
-voting_class = VotingClassifier(estimators=[('rf', best_rf), ('lr', best_lr), ('gb', best_gb)], voting='soft')
-voting_class.fit(X_train_res, y_train_res)
-y_pred = voting_class.predict(X_test)
-exibir_informacoes(y_test, y_pred)
