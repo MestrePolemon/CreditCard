@@ -1,20 +1,24 @@
-# Detecção de Fraude em Cartão de Crédito
+## 📖 **Sobre o Projeto**
 
-Este projeto tem como objetivo desenvolver um sistema de detecção de fraudes em transações de cartão de crédito utilizando Python. O sistema é baseado em técnicas de machine learning para identificar padrões suspeitos e sinalizar possíveis fraudes.
+Este projeto visa desenvolver um sistema de **detecção de fraudes** em transações de cartão de crédito utilizando **Python**. Através de técnicas de **machine learning**, o sistema identifica padrões suspeitos e sinaliza potenciais fraudes, contribuindo para a segurança de consumidores e instituições financeiras.
 
-![Fraude de Cartão de Crédito]
+---
 
-## Participantes
+## 👥 **Participantes**
 
 - **Gustavo Rossi**
 - **Bruno Trevizan**
 - **Yuji Kiyota**
 
-## Tecnologias Utilizadas
+---
 
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- Matplotlib
-- Seaborn
+## 🛠 **Tecnologias Utilizadas**
+
+- **Python**
+- **Pandas**
+- **NumPy**
+- **Scikit-learn**
+- **Matplotlib**
+- **Seaborn**
+
+---
