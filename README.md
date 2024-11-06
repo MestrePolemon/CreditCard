@@ -26,7 +26,6 @@ Este projeto implementa um sistema avançado de detecção de fraudes em cartõe
 
 ## 🔧 Instalação
 
-```bash
 pip install pandas numpy scikit-learn imbalanced-learn colorama tabulate
 
 Funcionalidades Principais
@@ -78,10 +77,6 @@ O script exibirá resultados detalhados para cada modelo, incluindo:
 
 O sistema realiza uma análise detalhada dos erros de classificação, fornecendo insights sobre as características das transações mal classificadas.
 
-    Gustavo Rossi:
-    
-    Bruno Trevizan:
-    
-    Yuji Kiyota:
+
     
 
