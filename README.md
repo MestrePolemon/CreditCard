@@ -1,37 +1,87 @@
-## 📖 **Sobre o Projeto**
+# Detecção de Fraudes em Cartões de Crédito usando Machine Learning
 
-Este projeto visa desenvolver um sistema de **detecção de fraudes** em transações de cartão de crédito utilizando **Python**. Através de técnicas de **machine learning**, o sistema identifica padrões suspeitos e sinaliza potenciais fraudes, contribuindo para a segurança de consumidores e instituições financeiras.
+![Python](https://img.shields.io/badge/Python-3.7%2B-blue)
+![Scikit-learn](https://img.shields.io/badge/Scikit--learn-0.24%2B-orange)
+![Pandas](https://img.shields.io/badge/Pandas-1.0%2B-green)
+![NumPy](https://img.shields.io/badge/NumPy-1.18%2B-yellow)
 
----
+## 📊 Visão Geral do Projeto
 
-## 👥 **Participantes**
+Este projeto implementa um sistema avançado de detecção de fraudes em cartões de crédito utilizando técnicas de machine learning. O sistema analisa transações e identifica padrões suspeitos que possam indicar atividades fraudulentas.
 
-- **Gustavo Rossi**
-- **Bruno Trevizan**
-- **Yuji Kiyota**
+## 👥 Equipe
 
----
+- Gustavo Rossi
+- Bruno Trevizan
+- Yuji Kiyota
 
-## 🛠 **Tecnologias Utilizadas**
+## 🛠️ Bibliotecas Utilizadas
 
-Este projeto utiliza as seguintes bibliotecas:
+- **pandas**: Manipulação e análise de dados
+- **numpy**: Operações numéricas
+- **scikit-learn**: Algoritmos de ML e pré-processamento
+- **imbalanced-learn**: Tratamento de dados desbalanceados
+- **colorama**: Saída colorida no console
+- **tabulate**: Formatação de tabelas no console
 
-- **Pandas**: Para manipulação e análise de dados.
-- **Scikit-learn**: Para implementação de modelos de machine learning e métricas de avaliação.
-  - `RandomForestClassifier`
-  - `GradientBoostingClassifier`
-  - `VotingClassifier`
-  - `LogisticRegression`
-  - `StandardScaler`
-  - `GridSearchCV`
-  - `train_test_split`
-  - `roc_auc_score`
-  - `accuracy_score`
-  - `confusion_matrix`
-  - `classification_report`
-- **Imbalanced-learn (imblearn)**: Para tratamento de dados desbalanceados com a técnica SMOTE.
-- **Colorama**: Para estilização de texto no terminal.
-- **Tabulate**: Para formatação de tabelas no terminal.
-- **OS**: Para interação com o sistema operacional.
+## 🔧 Instalação
 
----
+```bash
+pip install pandas numpy scikit-learn imbalanced-learn colorama tabulate
+
+Funcionalidades Principais
+
+    Carregamento e Pré-processamento de Dados
+        Carrega dados do arquivo CSV
+        Cria novas features
+        Trata valores ausentes
+
+    Engenharia de Features
+        Seleção das melhores features usando SelectKBest
+        Balanceamento de dados com SMOTETomek
+
+    Treinamento de Modelos
+        Random Forest
+        Regressão Logística
+        Gradient Boosting
+        SVM
+        Ensemble (Voting Classifier)
+
+    Otimização de Hiperparâmetros
+        Utiliza GridSearchCV para cada modelo
+
+    Avaliação de Modelos
+        Métricas: Acurácia, Matriz de Confusão, AUC-ROC, Relatório de Classificação
+
+    Ajuste de Limiar
+        Otimiza o limiar de classificação para melhorar o desempenho
+
+    Análise de Erros
+        Examina as características das previsões incorretas
+
+💻 Como Usar
+
+    Clone o repositório:
+
+    git clone https://github.com/seu-usuario/deteccao-fraude-cartao.git
+
+📊 Resultados
+
+O script exibirá resultados detalhados para cada modelo, incluindo:
+
+    Acurácia
+    Matriz de Confusão
+    AUC-ROC
+    Relatório de Classificação
+
+🔍 Análise de Erros
+
+O sistema realiza uma análise detalhada dos erros de classificação, fornecendo insights sobre as características das transações mal classificadas.
+
+    Gustavo Rossi:
+    
+    Bruno Trevizan:
+    
+    Yuji Kiyota:
+    
+
